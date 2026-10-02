@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="theme-color" content="#06070a">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquivo Noturno</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+<style>
+:root{box-sizing:border-box;color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#06070a;--ink:#f2f2f2;--muted:#a8abb3;--red:#c4101c;--card:#11141b;--line:#ffffff24;--ok:#5cb985;--bad:#e0705d;--gold:#e8b93a}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+h1,h2{font-weight:800;line-height:1.15;margin:0}
+h1{font-size:1.9rem}h2{font-size:1.5rem;margin:12px 0 6px}
+.hero{position:relative;overflow:hidden;border-radius:14px;padding:30px 16px 210px;text-align:center}
+.hero>svg{position:absolute;left:0;bottom:0;width:100%;height:230px}
+.hero:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(#06070a 35%,#06070a00 75%)}
+.hero>*:not(svg){position:relative;z-index:2}
+.hero p{color:var(--muted);margin:10px 0 18px}
+.cta{display:inline-block;text-decoration:none;color:#fff;border:0;border-radius:999px;padding:16px 38px;font-weight:600;text-transform:uppercase;background:linear-gradient(135deg,#d3101e,#7d0a12)}
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:22px 0 14px}
+.card{display:flex;flex-direction:column;gap:6px;padding:0 0 12px;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;font:inherit;overflow:hidden;cursor:pointer}
+.card>*:not(.img){padding:0 12px}
+.card .img svg{display:block;width:100%;height:110px}
+.card strong{font-size:1.05rem;font-weight:800}
+.card .tz{font-size:.8rem;color:var(--muted);flex:1}
+.card .st{font-weight:600;color:var(--red)}
+.card.cur{border-color:var(--red)}
+.card.done{border-color:var(--ok)}.card.done .st{color:var(--ok)}
+.card.lock{cursor:default;min-height:220px;align-items:center;justify-content:center;color:var(--muted);border-style:dashed}
+.card .big{font-size:2.6rem;font-weight:800}
+.meta{color:var(--muted);font-size:.85rem;margin:2px 0}
+.gold{color:var(--gold)}
+button{font:inherit}button:not(:disabled){cursor:pointer}
+.btn{background:linear-gradient(135deg,#d3101e,#7d0a12);color:#fff;border:0;border-radius:999px;padding:11px 22px;font-weight:600;margin:6px 8px 4px 0}
+.btn.ghost{background:none;border:1px solid var(--line)}
+.btn:disabled{opacity:.45}
+a:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.himg svg{display:block;width:100%;height:230px;border-radius:14px}
+.sc{font-size:1.1rem;border-left:4px solid var(--red);padding-left:14px;margin:10px 0 16px}
+.ans{display:flex;gap:10px;align-items:baseline;margin:0 0 6px;padding:8px 12px;border-radius:8px;background:var(--card);border-left:4px solid var(--line)}
+.ans b{min-width:78px}.a1{border-color:var(--ok)}.a1 b{color:var(--ok)}.a0{border-color:var(--bad)}.a0 b{color:var(--bad)}.a2 b{color:var(--muted)}
+.qs{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.steps{display:flex;gap:4px;margin:14px 0 8px}.steps i{flex:1;height:5px;border-radius:3px;background:var(--line)}.steps i.d{background:var(--ok)}.steps i.c{background:var(--red)}
+h3{font-size:1.1rem;font-weight:800;margin:6px 0 10px}
+.clue{background:#e9e0c6;color:#2a2418;border-radius:6px;padding:12px 14px;margin:0 0 10px;font-size:.95rem}.clue b{display:block;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;opacity:.7;margin-bottom:2px}
+.small .ans{font-size:.85rem;padding:5px 10px}
+.q:disabled{opacity:.4}.q{text-align:left;background:none;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.q:hover{border-color:#fff8}
+.opt{display:block;width:100%;text-align:left;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px}
+.opt.ok{border-color:var(--ok)}.opt.bad{border-color:var(--bad);opacity:.6}
+.stamp{border:3px solid var(--ok);color:var(--ok);font-weight:800;font-size:1.4rem;display:inline-block;padding:2px 14px;transform:rotate(-3deg);margin:12px 0}
+.stamp.l{border-color:var(--bad);color:var(--bad)}
+.hint{color:var(--bad);min-height:1.5em}
+html{-webkit-text-size-adjust:100%}
+button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn,.q,.opt{min-height:48px}.btn{padding:12px 22px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:8px 0;margin-top:-8px}
+h3{scroll-margin-top:64px}
+.himg svg{height:clamp(140px,38vw,230px)}
+@media (max-width:480px){main{padding:12px 12px 32px}h1{font-size:1.5rem}h2{font-size:1.3rem}.hero{padding:22px 12px 180px}.hero>svg{height:200px}.cta{display:block;text-align:center}.deck{gap:10px}.card .img svg{height:96px}.sc{font-size:1rem}.clue{font-size:.92rem}.ans b{min-width:68px}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s),app=$("#app");
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const fg=(x,y,s,o,t)=>`<g transform="translate(${x} ${y}) scale(${s})" opacity="${o}"><ellipse rx="9" ry="12" fill="url(#f)"/><path d="M-24 46c0-20 9-30 24-30s24 10 24 30z" fill="#0b1020"/>${t?'<path d="M-7 16h14l-7 8zM0 24l-3 20 3 4 3-4z" fill="#05070d"/>':""}</g>`;
+const art=(l,inner,F)=>`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${l}"><defs><linearGradient id="f"><stop offset="0" stop-color="#d1a074"/><stop offset=".6" stop-color="#4a3224"/><stop offset="1" stop-color="#07080c"/></linearGradient><radialGradient id="v"><stop offset=".35" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000"/></radialGradient></defs><rect width="160" height="100" fill="#07080c"/>${F.map(f=>fg(...f)).join("")}${inner}<rect width="160" height="100" fill="url(#v)"/></svg>`;
+const dos=(l,ic,y,tx,n)=>`<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${l}"><defs><linearGradient id="m" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c79556"/><stop offset="1" stop-color="#7a5528"/></linearGradient><radialGradient id="v"><stop offset=".35" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000"/></radialGradient></defs><rect width="160" height="100" fill="#07080c"/><g opacity=".5"><rect x="4" y="8" width="26" height="32" fill="#8a7a5a" transform="rotate(-10 17 24)"/><rect x="128" y="60" width="26" height="32" fill="#8a7a5a" transform="rotate(8 141 76)"/><rect x="122" y="6" width="26" height="30" fill="#6e6248" transform="rotate(6 135 21)"/></g><g transform="translate(8 14)">${ic}</g><g transform="rotate(-4 98 50)"><rect x="70" y="12" width="56" height="76" fill="url(#m)"/><text x="98" y="26" font-size="5" text-anchor="middle" fill="#3a2a14" font-family="Georgia,serif">UNIDADE DE INVESTIGAÇÃO</text><rect x="76" y="40" width="44" height="12" fill="none" stroke="#a3262f" stroke-width="1.5"/><text x="98" y="49" font-size="6.5" text-anchor="middle" fill="#a3262f" font-family="Georgia,serif" font-weight="700">${tx}</text><text x="98" y="68" font-size="5.5" text-anchor="middle" fill="#3a2a14" font-family="Georgia,serif">${n}</text><text x="98" y="81" font-size="10" text-anchor="middle" fill="#5a3f1a" font-family="Georgia,serif">${y}</text></g><circle cx="124" cy="84" r="9" fill="#fff" fill-opacity=".1" stroke="#cbb38a" stroke-width="2.5"/><path d="M130 90l8 8" stroke="#cbb38a" stroke-width="3"/><rect width="160" height="100" fill="url(#v)"/></svg>`;
+const IC=[
+`<rect x="6" y="2" width="38" height="50" fill="#8a6a1e"/><rect x="11" y="7" width="28" height="40" fill="#3b2f1c"/><ellipse cx="25" cy="22" rx="7" ry="9" fill="#9a7a4a"/><path d="M12 47c2-12 8-14 13-14s11 2 13 14z" fill="#2a2216"/>`,
+`<path d="M2 58V30a23 23 0 0 1 46 0v28z" fill="#1b140c" stroke="#8a6a1e" stroke-width="3"/><path d="M12 58V32a13 13 0 0 1 26 0v26z" fill="#000"/><rect x="14" y="48" width="22" height="10" fill="#4f8f5f"/><rect x="16" y="42" width="18" height="6" fill="#5fa070"/>`,
+`<path d="M2 14l30 4 14-14 4 2-8 16 8 16-4 2-14-14-30 4z" fill="#cfd6dc"/><path d="M10 46a15 15 0 0 1 30 0z" fill="#e0455a"/><path d="M10 46l15 16M40 46L25 62" stroke="#ddd"/>`,
+`<rect x="6" y="4" width="38" height="48" fill="#1d3a5a" stroke="#c9a14a" stroke-width="5"/><circle cx="32" cy="20" r="6" fill="#f4d35e"/><path d="M8 50l16-16 10 8 10-12v20z" fill="#2f6f4f"/><path d="M0 58L50 0" stroke="#e0455a" stroke-width="2"/>`,
+`<path d="M2 28a23 23 0 0 1 46 0q-6-5-11.500 0t-11.500 0-11.500 0T2 28z" fill="#2a2f3a" stroke="#6b7785"/><path d="M25 28v28q0 6-6 6" fill="none" stroke="#6b7785" stroke-width="3"/><path d="M25 5V0" stroke="#6b7785" stroke-width="2"/>`,
+`<rect x="12" y="2" width="26" height="9" rx="2" fill="#e8e8e8"/><rect x="8" y="11" width="34" height="46" rx="5" fill="#d8d0b8"/><rect x="12" y="24" width="26" height="22" fill="#b0402f"/><path d="M20 38h10" stroke="#fff" stroke-width="3"/>`];
+IC.push(`<path d="M2 40h46l-8 14H10z" fill="#5a6a78"/><rect x="18" y="26" width="16" height="14" fill="#8a96a2"/><rect x="24" y="12" width="5" height="14" fill="#8a96a2"/><path d="M26 10V2M18 6l8-4 8 4" fill="none" stroke="#e0455a" stroke-width="2"/>`,
+`<rect x="6" y="2" width="8" height="18" fill="#222"/><circle cx="10" cy="8" r="3" fill="#e0455a"/><rect x="2" y="28" width="46" height="22" rx="4" fill="#2b3a8f"/><rect x="8" y="32" width="10" height="8" fill="#cfe8f2"/><rect x="24" y="32" width="10" height="8" fill="#cfe8f2"/><circle cx="14" cy="54" r="5" fill="#222" stroke="#aaa"/><circle cx="36" cy="54" r="5" fill="#222" stroke="#aaa"/>`,
+`<rect x="6" y="4" width="38" height="52" fill="#0b0f18" stroke="#c9a14a" stroke-width="5"/><path d="M12 12l5 3-5 3 5 3-5 3" fill="none" stroke="#e8e0cc" stroke-width="1.5"/>`);
+const IMG=[0,1,2,3,4,5,6,7,8].map(k=>dos("Pasta de investigação do caso "+(k+1),IC[k],["1911","2005","1971","2006","1978","1982","1910","1963","1990"][k],"CONFIDENCIAL","ARQUIVO ["+(k+1)+"]"));
+const ST=[
+{t:"O Quadro Sumido",y:1911,l:"Paris",d:1,s:"Em 1911, a pintura mais famosa do mundo sumiu de um museu de Paris. A falta só foi notada no dia seguinte. Não havia arrombamento nem sinal de luta.",
+q:[["Houve arrombamento?",0],["O ladrão conhecia o museu?",1],["Ele se vestiu de forma a não chamar atenção?",1],["Ele agiu com cúmplices armados?",0],["O museu estava aberto ao público naquele dia?",0],["A pintura foi recuperada?",1],["O ladrão foi pego logo?",0],["Ele tentou vender a obra?",1],["O dia estava chuvoso?",2]],
+r:"Vincenzo Peruggia, que já havia trabalhado no museu, entrou vestido como os funcionários num dia em que o Louvre estava fechado ao público e saiu com a pintura. Foi preso em 1913, ao tentar vendê-la em Florença.",
+w:["Um grupo armado rendeu os guardas e levou a obra num furgão.","A pintura foi trocada por uma cópia, e o roubo só apareceu décadas depois.","O diretor do museu a vendeu em segredo e fingiu o roubo."]},
+{t:"O Túnel de Fortaleza",y:2005,l:"Fortaleza, Brasil",d:2,s:"Em agosto de 2005, funcionários do Banco Central de Fortaleza abriram o cofre numa segunda-feira e encontraram cerca de R$ 164 milhões a menos. As portas e os alarmes estavam intactos.",
+q:[["Os ladrões entraram pela porta do banco?",0],["Alguém armado rendeu os funcionários?",0],["Eles passaram por baixo da terra?",1],["Usaram um imóvel próximo?",1],["Esse imóvel fingia ser outra coisa?",1],["O crime foi planejado em poucos dias?",0],["O banco ficou fechado durante o fim de semana?",1],["O dinheiro foi todo recuperado?",0],["Choveu naquele fim de semana?",2]],
+r:"A quadrilha alugou uma casa perto do banco, montou ali uma falsa empresa de grama sintética e escavou por cerca de três meses um túnel de aproximadamente 80 metros até o cofre. Levaram o dinheiro no fim de semana, e só parte dele foi recuperada.",
+w:["Um segurança abriu o cofre e dividiu o dinheiro, sem túnel nenhum.","Os ladrões entraram pelo duto de ventilação durante o expediente.","Um carro-forte falso levou o dinheiro durante uma transferência normal."]},
+{t:"O Homem do Paraquedas",y:1971,l:"Estados Unidos",d:3,s:"Em 1971, um homem sequestrou um avião nos Estados Unidos e recebeu um resgate. Quando o avião pousou pela última vez, ele não estava mais a bordo. Nunca foi identificado.",
+q:[["O avião pousou com ele a bordo?",0],["Ele saiu do avião durante o voo?",1],["Ele usava paraquedas?",1],["Ele ameaçou com uma bomba?",1],["Os passageiros foram feridos?",0],["O dinheiro foi todo encontrado?",0],["Ele foi identificado depois?",0],["Ele pediu que o avião decolasse de novo?",1],["A comissária usava uniforme azul?",2]],
+r:"O homem, conhecido como Dan Cooper, ameaçou com uma bomba, trocou os passageiros por US$ 200 mil e paraquedas e fez o avião decolar de novo. Saltou pela escada traseira do Boeing 727 e nunca foi identificado.",
+w:["Ele se misturou aos passageiros libertados e saiu pelo aeroporto.","Ele foi preso, mas o caso foi escondido pela polícia.","A bomba explodiu no ar e o avião caiu."]},
+{t:"Carnaval no Museu",y:2006,l:"Rio de Janeiro, Brasil",d:4,s:"Numa tarde de sexta-feira de Carnaval, em 2006, foliões enchiam as ruas de um bairro do Rio. Quatro homens entraram num museu cercado de mata e, meia hora depois, sumiram com cinco quadros de artistas famosos. O caso nunca foi solucionado.",
+q:[["O roubo foi feito de madrugada?",0],["Os ladrões estavam armados?",1],["Houve reféns?",1],["As câmeras do museu continuaram gravando o tempo todo?",0],["O Carnaval ajudou na fuga?",1],["Os ladrões levaram todo o acervo do museu?",0],["Todos os quadros foram recuperados?",0],["O caso foi solucionado?",0],["O museu ficava no alto de uma rampa?",2]],
+r:"Quatro homens armados, com uma granada, entraram no museu da Chácara do Céu, em Santa Teresa, na tarde da sexta-feira de Carnaval de 2006. Renderam os seguranças, mandaram desligar as câmeras, fizeram turistas de reféns e, em cerca de meia hora, levaram um Dalí, um Matisse, um Monet e dois Picassos, fugindo aproveitando o movimento do Carnaval. O caso nunca foi solucionado e prescreveu 20 anos depois.",
+w:["Eram funcionários do museu, que entraram de madrugada, sem armas e com as chaves.","Um grupo de turistas levou os quadros escondidos e foi preso no aeroporto.","Os quadros foram achados dias depois num apartamento, e os ladrões foram condenados."]},
+{t:"A Picada na Ponte",y:1978,l:"Londres",d:4,s:"Em 1978, um escritor exilado esperava o ônibus numa ponte de Londres. Sentiu uma picada na perna e viu um homem se afastando. Quatro dias depois, estava morto.",
+q:[["O homem o atacou com uma faca?",0],["Um objeto comum foi usado no ataque?",1],["O objeto servia para se proteger da chuva?",1],["Algo foi disparado para dentro do corpo?",1],["Era uma substância tóxica?",1],["O motivo foi político?",1],["O autor foi condenado?",0],["A vítima morreu na hora?",0],["A vítima usava chapéu?",2]],
+r:"Georgi Markov foi atingido por uma esfera minúscula com ricina, disparada da ponta de um guarda-chuva. Morreu quatro dias depois. O ataque foi atribuído por investigadores ao serviço secreto da Bulgária, e ninguém foi condenado.",
+w:["Uma aranha venenosa solta pelo assassino o picou.","O assassino injetou veneno com uma seringa escondida na mão.","Ele foi atropelado por um carro que fugiu."]},
+{t:"Os Frascos de Chicago",y:1982,l:"Chicago",d:5,s:"Em 1982, várias pessoas sem relação entre si morreram em poucos dias na região de Chicago. Todas haviam tomado o mesmo remédio comum, comprado em lojas diferentes.",
+q:[["Todas tomaram o mesmo produto?",1],["Elas se conheciam?",0],["O problema veio da fábrica?",0],["Alguém mexeu nos frascos depois que saíram da fábrica?",1],["Foi usado um veneno?",1],["O culpado foi condenado pelas mortes?",0],["O caso mudou o jeito de embalar remédios?",1],["A morte foi rápida?",1],["O remédio era caro?",2]],
+r:"Alguém trocou cápsulas por outras com cianeto e devolveu os frascos às prateleiras. Sete pessoas morreram. O culpado nunca foi identificado, e o caso levou às embalagens com lacre de segurança.",
+w:["A fábrica usou um ingrediente contaminado por engano.","Um funcionário da fábrica foi preso e condenado pelas mortes.","Uma epidemia de gripe causou as mortes, sem ligação com o remédio."]}];
+const PN=["O caso","Cena do crime","Perícia policial","Investigação","Evidências","A solução"];
+const PH=[
+[{doc:"Ocorrência: o desaparecimento ocorreu numa segunda-feira, dia em que o museu estava fechado ao público. Na terça, 22 de agosto de 1911, o pintor Louis Béroud foi copiar o quadro e achou quatro pregos na parede. O guarda achou que a obra estava no estúdio de fotografia e só horas depois a falta foi confirmada. Na escada de serviço ao lado da galeria, a polícia achou a moldura e o vidro de proteção.",q:"O que o local onde a moldura foi achada indica?",o:["A obra foi tirada da moldura ali, perto de uma saída de serviço","O ladrão fugiu pela janela da galeria","A obra foi destruída e queimada na escada","O ladrão deixou a moldura e voltou ao museu"]},
+{doc:"Laudo: a polícia colheu uma impressão digital na moldura e no vidro, mas não conseguiu ligá-la a ninguém. Na época, o arquivo policial francês ainda dependia do método de medidas de Bertillon e usava pouco as impressões digitais.",q:"Por que a impressão digital não levou ao ladrão de imediato?",o:["O arquivo ainda dependia do método de Bertillon e usava pouco as digitais","A impressão era de um guarda e foi descartada","O ladrão usou luvas, então não havia impressão","O vidro foi lavado antes da chegada da polícia"]},
+{doc:"Investigação: a polícia interrogou o poeta Guillaume Apollinaire, ligado a um ex-secretário que roubara estatuetas do museu em 1907 e as vendera a Picasso. O pintor também foi interrogado. Os dois foram liberados por falta de provas, e por dois anos nenhuma pista séria apareceu.",q:"Por que Apollinaire entrou na lista de suspeitos?",o:["Estava ligado a um homem que já furtara estatuetas do mesmo museu","Trabalhava como guarda do museu","Foi visto saindo do museu com um embrulho","Havia pintado uma cópia da obra"]},
+{doc:"Evidência: em dezembro de 1913, um marchand de Florença, Alfredo Geri, recebeu cartas oferecendo a obra por 500 mil liras e avisou o diretor da Galeria Uffizi, Giovanni Poggi. O vendedor mostrou a pintura num hotel, escondida no fundo falso de uma mala. Poggi conferiu o verso da tela.",q:"Qual detalhe permitiu confirmar a autenticidade quase de imediato?",o:["O carimbo e o número de catálogo do Louvre no verso","A assinatura de Leonardo no canto da tela","Um raio X feito no próprio hotel","Um certificado entregue pelo vendedor"]}],
+[{doc:"Segunda-feira, 8 de agosto de 2005: ao abrir a caixa-forte, os funcionários encontraram sumido o dinheiro em notas de R$ 50, cerca de 3,5 toneladas. As portas e os alarmes estavam intactos. No piso da caixa-forte, a polícia achou uma abertura na laje de concreto.",q:"O que a falta de arrombamento nas portas e a abertura no piso indicam?",o:["A entrada foi feita por baixo, sem passar pelas portas","Um funcionário abriu as portas e as fechou depois","O alarme foi desligado por um hacker","O dinheiro saiu num carro-forte dias antes"]},
+{doc:"Perícia da Polícia Federal: a abertura dava num túnel de quase 80 metros, com ventilação, iluminação e escoras de madeira, que saía numa casa alugada perto do banco. Ali funcionava uma empresa de venda de grama sintética, com placa na frente. Havia uma parede falsa de sacos de areia.",q:"Qual era a função da empresa de grama sintética?",o:["Disfarçar a entrada de material e a saída de terra do túnel","Lavar o dinheiro depois do roubo","Servir de álibi ao dono da casa","Vender ao banco o material da caixa-forte"]},
+{doc:"Investigação: a quadrilha planejou o crime por cerca de três meses e contou com informações internas de alguém ligado ao banco. Chegou à laje da caixa-forte em 4 de agosto. O roubo só foi descoberto na segunda-feira, e o dinheiro já tinha seguido para pelo menos três destinos, um deles um bairro da periferia, onde parte foi enterrada.",q:"Para que serviu a informação interna?",o:["Para saber onde escavar e chegar à caixa-forte com precisão","Para abrir a porta principal à noite","Para desligar as câmeras à distância","Para trocar o dinheiro por notas falsas"]},
+{doc:"Evidências: ao fim das investigações, dezenas de pessoas foram presas e só uma parte do dinheiro foi recuperada (as fontes divergem, de cerca de R$ 20 a R$ 60 milhões). O suposto engenheiro do túnel ficou foragido por anos antes de ser capturado.",q:"Por que recuperar o dinheiro foi tão difícil?",o:["Ele foi dividido em vários destinos, e parte foi enterrada e gasta","Todas as notas foram devolvidas ao banco pelos ladrões","O banco nunca informou o valor roubado","Os ladrões queimaram quase tudo"]}],
+[{doc:"24 de novembro de 1971, voo 305 da Northwest Orient, Portland-Seattle, Boeing 727. Um homem de terno e gravata preta, sob o nome Dan Cooper, entrega um bilhete a uma comissária dizendo ter uma bomba na maleta. Pede US$ 200 mil em notas de 20, quatro paraquedas e combustível em Seattle. Em Seattle, solta os passageiros e manda decolar de novo, voando baixo e devagar, com o trem de pouso baixado.",q:"O que o pedido de voar baixo e devagar, com o trem de pouso baixado, permitia?",o:["Saltar com mais segurança pela escada traseira do 727","Escapar dos radares","Economizar combustível até o México","Impedir que o avião pousasse sozinho"]},
+{doc:"Laudo do FBI: o avião foi tratado como cena de crime e cerca de 66 impressões digitais latentes foram colhidas, sem identificar o suspeito. Cooper deixou na poltrona uma gravata de pressão com prendedor de pérola. Análises posteriores acharam partículas metálicas na gravata.",q:"Por que a gravata é uma evidência tão importante?",o:["Era um dos poucos objetos pessoais dele, possível fonte de DNA e de pistas","Tinha o nome de Cooper gravado","Foi comprada por ele no mesmo dia","Era de uma marca vendida só no Japão"]},
+{doc:"Investigação: o FBI examinou mais de mil suspeitos. Richard McCoy sequestrou outro avião em 1972 e saltou com US$ 500 mil, mas na data do voo 305 estava em casa com a família, segundo o FBI.",q:"Por que McCoy foi descartado como Cooper?",o:["Ele tinha álibi: estava em casa na data do sequestro","Estava preso na época","Suas digitais não bateram com as do avião","Morreu antes do voo"]},
+{doc:"Evidências: em 1980, um menino de 8 anos achou cerca de US$ 5.800 em notas de 20, apodrecidas, na margem do rio Columbia, em Tena Bar. Os números de série batiam com os do resgate. Um dos paraquedas também foi achado no estado de Washington. Nenhum corpo foi encontrado.",q:"O que o achado do dinheiro prova com segurança?",o:["Que parte do dinheiro chegou à região, mas não que Cooper sobreviveu","Que Cooper sobreviveu e gastou o resto","Que Cooper morreu afogado","Que o dinheiro era falso"]}],
+[{doc:"Sexta-feira de Carnaval, 24 de fevereiro de 2006, por volta das 14h. Quatro homens entraram no museu da Chácara do Céu, em Santa Teresa, enquanto um bloco de rua tomava o bairro. Renderam os seguranças, fizeram cerca de nove turistas de reféns e mandaram desligar as câmeras. Um deles subiu num móvel e cortou com uma faca os fios de náilon que prendiam um quadro. Em cerca de meia hora, saíram.",q:"Por que o Carnaval foi uma vantagem para os ladrões?",o:["A multidão e o barulho dificultavam a ação da polícia e escondiam a fuga","O museu estava fechado ao público","Os seguranças estavam de folga","As câmeras só funcionam à noite","O bloco de rua foi organizado pelos ladrões"]},
+{doc:"Dias depois, após um telefonema anônimo, a polícia achou no morro dos Prazeres, a menos de um quilômetro do museu, restos queimados de gesso e madeira das molduras de três quadros, com um pedaço de tecido queimado que trazia o número de registro de uma das telas no museu. As telas não estavam ali.",q:"O que o achado das molduras queimadas indica?",o:["As telas foram tiradas das molduras logo após o roubo, perto do museu","As telas foram queimadas junto com as molduras","Os ladrões moravam dentro do museu","Os quadros eram falsos","O museu queimou as molduras para sumir com provas"]},
+{doc:"A primeira linha de investigação envolveu o dono de uma Kombi branca, na qual ao menos uma obra teria sido transportada. A polícia suspeitava que ele fosse cúmplice dos quatro assaltantes. Em 1989, o mesmo museu já havia sido roubado, e duas das mesmas obras, de Matisse e de Dalí, foram levadas e depois achadas num apartamento no Rio. A polícia também divulgou o retrato de um francês suspeito.",q:"O que o roubo de 1989 mostra sobre o museu?",o:["Já havia sido alvo antes, e duas das mesmas obras foram levadas de novo","Nunca tinha sofrido um roubo antes","Todas as obras de 1989 foram perdidas","Em 1989 foi só um assalto sem obras levadas","Em 1989 os ladrões foram condenados e a segurança foi reforçada"]},
+{doc:"Cinco obras foram levadas: um Dalí, um Matisse, um Monet e dois Picassos, avaliados em mais de US$ 10 milhões. Nenhuma foi recuperada. O FBI listou o caso entre os maiores roubos de arte do mundo. Passados 20 anos, o crime prescreveu em fevereiro de 2026, e os responsáveis não poderão mais ser punidos.",q:"Qual é a situação do caso hoje?",o:["Nenhuma obra foi achada, o caso nunca foi solucionado e o crime prescreveu","As obras voltaram e os ladrões foram condenados","Os ladrões foram condenados, mas as obras sumiram","As obras foram achadas num leilão e devolvidas ao museu","O caso foi arquivado porque os quadros eram falsos"]}],
+[{doc:"7 de setembro de 1978, aniversário do líder comunista da Bulgária. Na ponte Waterloo, em Londres, Georgi Markov, jornalista da BBC e opositor do regime, espera o ônibus e sente uma picada na coxa. Um homem pega um guarda-chuva do chão e se afasta.",q:"Por que a data do ataque chama atenção?",o:["Era o aniversário do líder búlgaro que Markov criticava","Era o aniversário de Markov","Era o dia em que ele se mudou para Londres","Era a estreia de uma peça dele"]},
+{doc:"Autópsia: Markov teve febre alta, pulso acelerado e pressão baixa e morreu em 11 de setembro. Na coxa, o perito David Gall, de Porton Down, achou uma esfera metálica do tamanho de uma cabeça de alfinete, com dois furos. Não havia teste confiável para ricina, que o corpo degrada rápido.",q:"Como os peritos concluíram que o veneno era ricina?",o:["Injetaram ricina num porco e viram danos iguais aos de Markov","Mediram ricina no sangue de Markov","A esfera tinha o rótulo do veneno","O autor confessou"]},
+{doc:"Investigação: dez dias antes, em Paris, o jornalista búlgaro Vladimir Kostov sentiu uma picada nas costas no metrô. Ele sobreviveu, e a esfera achada nele era idêntica à de Markov.",q:"Por que o caso de Kostov foi decisivo?",o:["Mostrou o mesmo método e ligou os ataques a uma operação planejada","Provou que o autor morava em Paris","Mostrou que Kostov era o culpado","Encerrou a investigação"]},
+{doc:"Evidências: arquivos da polícia secreta búlgara, revelados depois, apontam um agente de codinome Piccadilly, treinado e premiado após a morte. Um suspeito foi interrogado na Dinamarca em 1993 e nunca foi acusado. Em 2013, a Bulgária encerrou a investigação sem identificar, acusar ou prender ninguém.",q:"Qual é a situação oficial do caso?",o:["Arquivado em 2013, sem acusados","O autor foi condenado em Londres","O autor confessou em 1990","Foi declarado acidente"]}],
+[{doc:"29 de setembro de 1982: uma menina de 12 anos morre em Elk Grove Village. Cerca de uma hora depois, um carteiro de 27 anos morre em Arlington Heights, a cerca de 11 km, e outros familiares passam mal. As vítimas não se conheciam e moravam em cidades diferentes.",q:"O que a distância entre as vítimas sugere sobre onde o veneno foi colocado?",o:["Em vários pontos de venda, e não na casa das vítimas","Num único hospital","Na casa de uma só vítima","Na água da cidade"]},
+{doc:"Análise do laboratório de saúde de Chicago: de milhares de frascos e cerca de 80 mil cápsulas, algumas continham cianeto de potássio. Os frascos adulterados pertenciam a lotes diferentes, feitos em fábricas diferentes.",q:"O que lotes e fábricas diferentes indicam?",o:["A adulteração ocorreu depois que os frascos saíram da fábrica","Uma falha de produção numa só fábrica","Um ingrediente contaminado do mesmo fornecedor","Um erro de rotulagem"]},
+{doc:"Investigação: a fabricante recebeu uma carta exigindo US$ 1 milhão para parar as mortes. O autor, James Lewis, foi preso, admitiu a carta e disse que não pretendia receber o dinheiro. Sempre negou os envenenamentos e foi condenado por extorsão.",q:"Por que Lewis não foi condenado pelas mortes?",o:["Faltavam provas ligando-o aos envenenamentos","Ele provou um álibi em tribunal","A carta foi escrita depois de ele ser preso","O júri o declarou inocente do assassinato"]},
+{doc:"Evidências: em 5 de outubro, a fabricante recolheu cerca de 31 milhões de frascos. Só as cápsulas haviam sido adulteradas. O culpado pelos envenenamentos nunca foi identificado. O caso levou a lacres e embalagens invioláveis e a leis federais contra adulteração de produtos.",q:"Qual foi a consequência mais duradoura do caso?",o:["Embalagens invioláveis e leis contra adulteração de produtos","O produto foi banido para sempre","O culpado foi preso em 1990","A fábrica foi fechada"]}]];
+const PX=[
+[[["O museu estava aberto ao público quando a obra foi levada?",0],["A moldura saiu do museu junto com a obra?",0],["O guarda achou logo que era roubo?",0],["Quem notou a falta foi um pintor?",1],["O pintor estava de chapéu?",2]],
+[["Foi achada uma impressão digital?",1],["A polícia identificou o dono dela de imediato?",0],["O método de Bertillon ainda era muito usado na época?",1],["A impressão era do ladrão?",1],["A moldura era de madeira dourada?",2]],
+[["Apollinaire foi preso?",1],["Apollinaire foi condenado pelo roubo?",0],["Picasso foi interrogado?",1],["O verdadeiro ladrão estava entre os primeiros suspeitos?",0],["Apollinaire gostava de música?",2]],
+[["O ladrão foi pego tentando vender a obra?",1],["A obra estava danificada?",0],["Ela estava escondida no fundo falso de uma mala?",1],["O diretor de um museu italiano participou da armadilha?",1],["A mala era marrom?",2]]],
+[[["O dinheiro sumiu durante o expediente?",0],["As portas do cofre foram arrombadas?",0],["A abertura estava no piso da caixa-forte?",1],["A falta foi notada numa segunda-feira?",1],["Chovia forte naquele fim de semana?",2]],
+[["O túnel tinha iluminação?",1],["O túnel tinha mais de 200 metros?",0],["Ele saía numa casa perto do banco?",1],["Havia escoras de madeira no túnel?",1],["A rua da casa tinha árvores?",2]],
+[["A quadrilha planejou o crime em poucos dias?",0],["Houve ajuda de alguém ligado ao banco?",1],["Todo o dinheiro ficou num só lugar?",0],["Parte do dinheiro foi enterrada?",1],["Algum criminoso usava farda do banco?",2]],
+[["Todo o dinheiro foi recuperado?",0],["Houve prisões?",1],["O suposto engenheiro do túnel foi preso logo?",0],["Parte do dinheiro foi recuperada?",1],["Esse caso virou filme?",2]]],
+[[["Ele disse ter uma bomba?",1],["Ele soltou os passageiros em Seattle?",1],["Ele pediu quatro paraquedas?",1],["Ele mandou o avião voar alto e rápido?",0],["Ele pediu bebida a bordo?",2]],
+[["Foram colhidas impressões digitais no avião?",1],["O FBI identificou o dono das digitais?",0],["Ele deixou uma gravata no avião?",1],["O prendedor da gravata era de ouro maciço?",0],["A comissária usava uniforme azul?",2]],
+[["O FBI examinou mais de mil suspeitos?",1],["McCoy foi confirmado como Cooper?",0],["McCoy também sequestrou um avião?",1],["O FBI encerrou o caso identificando Cooper?",0],["Cooper era canhoto?",2]],
+[["Foi achado dinheiro do resgate?",1],["O achado foi em 1980?",1],["O corpo de Cooper foi achado?",0],["Quem achou o dinheiro foi um policial?",0],["O rio era o Mississippi?",0]]],
+[[],[],[],[]],
+[[["O ataque foi numa ponte?",1],["Ele sentiu uma picada?",1],["A vítima trabalhava na BBC?",1],["O ataque aconteceu em Paris?",0],["Chovia forte naquele dia?",2]],
+[["A vítima morreu na hora?",0],["Foi achada uma esfera metálica minúscula?",1],["Havia teste confiável para ricina?",0],["O perito usou um porco num experimento?",1],["O hospital ficava perto da ponte?",2]],
+[["Outro jornalista búlgaro foi atacado dias antes?",1],["Esse outro jornalista morreu?",0],["A esfera dele era diferente da de Markov?",0],["O ataque a ele foi em Paris?",1],["Ele era músico?",2]],
+[["Houve condenação do autor?",0],["A Bulgária encerrou o caso em 2013?",1],["Um agente de codinome apareceu nos arquivos?",1],["A polícia prendeu o autor em Londres?",0],["Os arquivos foram revelados na época do crime?",0]]],
+[[["As vítimas se conheciam?",0],["Todas moravam na mesma casa?",0],["Todas tomaram o mesmo analgésico?",1],["A primeira vítima era uma criança?",1],["Fazia calor em Chicago naquele dia?",2]],
+[["Havia cianeto nas cápsulas?",1],["Todos os frascos vinham de um só lote?",0],["Só as cápsulas foram adulteradas?",1],["O envenenamento ocorreu na fábrica?",0],["Os frascos eram de vidro?",2]],
+[["Chegou uma carta pedindo dinheiro?",1],["O pedido era de US$ 1 milhão?",1],["Lewis foi condenado pelas mortes?",0],["Lewis foi condenado por extorsão?",1],["Lewis já tinha morado em Chicago?",2]],
+[["A empresa recolheu os frascos do mercado?",1],["O culpado foi identificado?",0],["Surgiram embalagens invioláveis?",1],["A empresa foi à falência?",0],["O recolhimento foi de menos de cem frascos?",0]]]];
+ST.push(
+{t:"O Casal do Navio",y:1910,l:"Londres",d:6,s:"Em 1910, a esposa de um médico americano em Londres deixou de ser vista depois de uma festa em casa. O marido disse que ela voltara para os Estados Unidos. Semanas depois, um policial voltou à casa e, dessa vez, achou algo no subsolo.",
+q:[["A mulher foi vista viva depois da festa?",0],["O marido deu uma explicação à polícia?",1],["O marido ficou na cidade depois da primeira visita?",0],["Uma amante estava envolvida?",1],["A amante usava roupas da desaparecida?",1],["Algo foi encontrado no subsolo?",1],["O corpo foi achado completo?",0],["O marido foi preso em Londres?",0],["A casa ficava perto do rio?",2]],
+r:"O médico Hawley Crippen foi condenado pela morte da esposa, Cora, cujos restos foram achados no porão. Ele fugiu de navio com a amante, Ethel Le Neve, vestida de rapaz. O capitão os reconheceu e avisou a polícia por telégrafo sem fio, a primeira vez que o rádio ajudou a prender um suspeito.",
+w:["A esposa fugiu com um amante, e o corpo achado era de um ladrão que invadiu a casa.","O médico a envenenou num jantar e se entregou ao saber que a polícia voltaria.","Ela foi morta por um inquilino, e o médico fugiu por medo de ser acusado injustamente.","O médico fingiu a morte da esposa para receber um seguro e foi achado em Paris por um detetive."]},
+{t:"Monopoly dos Ladrões",y:1963,l:"Inglaterra",d:6,s:"Em 1963, quinze homens pararam um trem de correio na madrugada e levaram sacos de dinheiro em poucos minutos. A polícia não tinha pistas, até achar a casa de campo onde eles se esconderam e o que deixaram sobre a mesa.",
+q:[["Os ladrões usaram armas de fogo contra a tripulação?",0],["Alguém ficou ferido?",1],["O trem foi parado por um sinal adulterado?",1],["Os ladrões escaparam sem deixar rastro?",0],["Eles se esconderam numa fazenda?",1],["Um vizinho desconfiou da fazenda?",1],["Os ladrões queimaram a casa antes de fugir?",0],["O dinheiro era em notas grandes?",0],["O trem era azul?",2]],
+r:"A quadrilha parou o trem cobrindo a luz verde de um sinal com uma luva e ligando uma lâmpada vermelha a uma bateria. Levou cerca de 2,6 milhões de libras e se escondeu na fazenda Leatherslade. Ali jogaram Monopoly com dinheiro de verdade e deixaram digitais no tabuleiro e num frasco de ketchup, o que levou à prisão da maioria.",
+w:["Um dos ladrões entregou os demais em troca de perdão, sem nenhuma prova material.","Uma câmera da estação filmou os rostos de todos, e a polícia os identificou.","O dinheiro tinha números de série anotados e foi rastreado quando tentaram gastá-lo.","Um maquinista cúmplice foi preso e denunciou o esconderijo."]},
+{t:"81 Minutos",y:1990,l:"Boston, EUA",d:6,s:"Na madrugada seguinte a uma festa popular, dois homens bateram à porta de um museu de arte e se identificaram como policiais. Pouco mais de uma hora depois, saíram, e na parede ficaram molduras vazias.",
+q:[["Eles usaram violência grave contra os seguranças?",0],["Os seguranças foram amarrados?",1],["Os ladrões estavam disfarçados?",1],["Os ladrões entraram arrombando uma janela?",0],["Os seguranças abriram a porta?",1],["Os ladrões levaram tudo o que havia de mais valioso?",0],["Alguém foi condenado?",0],["Os ladrões levaram a fita das câmeras?",1],["Era uma noite de verão?",2]],
+r:"Dois homens vestidos de policiais disseram atender a uma ocorrência, e o segurança abriu a porta. Eles amarraram os dois seguranças com fita adesiva no porão, passaram 81 minutos levando 13 obras (entre elas um Vermeer e Rembrandts) e levaram a fita das câmeras. O caso continua sem solução, e as molduras seguem vazias.",
+w:["Os ladrões eram dois funcionários do museu, presos dias depois com as obras.","Os ladrões arrombaram uma janela dos fundos e desligaram o alarme com um código roubado.","Os seguranças eram cúmplices e foram condenados, e as obras foram devolvidas depois.","As obras foram recuperadas anos depois num depósito, e as molduras são só um memorial."]});
+PH.push(
+[{doc:"Inspetor Walter Dew visitou a casa em 8 de julho e aceitou a história do médico. No dia seguinte, o médico e a secretária sumiram. Dew voltou e, numa busca de dois dias, soltou tijolos do piso do porão. Debaixo deles havia restos humanos sem cabeça, membros nem esqueleto.",q:"Por que a primeira busca não achou os restos?",o:["Estavam enterrados sob o piso do porão, e a busca foi superficial","Os restos foram levados e depois devolvidos","O crime ainda não havia acontecido","A polícia só procurou no jardim","Os tijolos do piso estavam intactos e nada foi mexido"]},
+{doc:"O patologista Bernard Spilsbury, no seu primeiro grande caso, achou nos restos hioscina, um sedativo venenoso. Uma peça de pele do abdômen tinha o que ele e colegas descreveram como cicatriz de cirurgia, compatível com uma operação de Cora. Junto aos restos havia um casaco de pijama, rastreado até um fabricante de 1908.",q:"Por que o casaco de pijama era importante?",o:["Situava o enterro depois de 1908, enquanto os Crippen viviam na casa","Tinha o nome de Cora bordado","Provava que o pijama era de Ethel","Indicava que o corpo era de um inquilino","Tinha manchas de veneno"]},
+{doc:"Dew foi a Liverpool e embarcou num navio mais rápido. Enquanto isso, o capitão Henry Kendall, do Montrose, estranhou um passageiro cujo filho vestia roupas largas e andava de mãos dadas com ele, e comparou os dois com fotos de jornal. Kendall mandou um telegrama sem fio antes de sair do alcance do transmissor. Os dois viajavam sob o nome de Robinson.",q:"Que detalhe levou o capitão a desconfiar?",o:["O jovem filho, de roupas mal ajustadas, e o jeito do casal","O passageiro pagou a passagem em dinheiro vivo","O capitão recebeu aviso da polícia antes da partida","O passageiro carregava uma maleta com veneno","A secretária assinou com o nome verdadeiro"]},
+{doc:"Crippen foi condenado em 1910 e enforcado em novembro. Ethel foi julgada à parte e absolvida. Em 2007, exames de DNA mitocondrial em amostras guardadas desde 1910 não bateram com parentes maternos de Cora e indicaram que a pele era de um homem. Os resultados foram contestados.",q:"O que os exames de 2007 provam de forma segura?",o:["Que a amostra guardada pode não ser de Cora, mas o caso segue em discussão","Que Crippen era inocente","Que Cora estava viva em 1910","Que a polícia trocou a amostra de propósito","Que o patologista falsificou o laudo"]}],
+[{doc:"Pouco depois das 3h de 8 de agosto de 1963, o maquinista Jack Mills parou o trem Glasgow-Londres num sinal vermelho perto de Cheddington. A luz verde estava coberta por uma luva, e uma bateria acendia a luz vermelha. Os ladrões cortaram os fios do telefone da linha, dominaram a tripulação e feriram Mills na cabeça. Em cerca de quinze minutos, uma corrente humana passou 120 sacos de dinheiro para os veículos.",q:"Por que o sinal vermelho falso foi decisivo?",o:["Fez o trem parar num ponto escolhido, perto de uma ponte e de estradas de fuga","Fez o maquinista abrir a porta do vagão","Avisou a polícia local de que havia um problema","Cortou a energia de todo o trem","Impediu o alarme de funcionar"]},
+{doc:"Os peritos encontraram veículos dos ladrões na fazenda e, dentro da casa, impressões digitais em objetos comuns: um tabuleiro de Monopoly e um frasco de ketchup. Os ladrões tinham tentado limpar os vestígios, mas esqueceram marcas em objetos que tocaram sem pensar.",q:"Por que as digitais em objetos comuns foram tão incriminadoras?",o:["Eles limparam superfícies óbvias e esqueceram objetos que tocaram sem pensar","As digitais eram de policiais que invadiram a casa","O tabuleiro era do dono da fazenda","O ketchup era evidência de veneno","Os objetos foram plantados pela polícia"]},
+{doc:"O fazendeiro vizinho, John Maris, achou estranhas as janelas escurecidas da casa, e a polícia recebeu denúncias. Os ladrões planejavam ficar alguns dias e queimar a casa antes de partir. Cedo, ouviram no rádio uma notícia sobre a polícia vasculhar fazendas da região e foram embora às pressas, sem apagar todos os vestígios.",q:"O que explica os vestígios deixados na fazenda?",o:["A fuga apressada depois de ouvirem a notícia no rádio","Eles queriam ser presos","O plano nunca incluía limpar nada","Foram traídos por um cúmplice","Foi erro do perito"]},
+{doc:"Onze homens foram presos ao longo dos anos, com penas de até 30 anos. O mentor, Bruce Reynolds, só foi preso em 1968. Quase todo o dinheiro nunca foi recuperado. O maquinista Mills voltou ao trabalho em tarefas leves e nunca superou o trauma.",q:"Qual foi o saldo da investigação?",o:["A maioria foi presa por digitais e pistas, mas quase todo o dinheiro sumiu","Todo o dinheiro voltou ao correio","Ninguém foi preso por falta de provas","O mentor foi preso na mesma semana","O maquinista foi punido por cumplicidade"]}],
+[{doc:"Madrugada de 18 de março de 1990, depois do dia de São Patrício, por volta de 1h24: dois homens de uniforme de polícia tocaram a campainha do museu Isabella Stewart Gardner, dizendo atender a um chamado. O segurança abriu a porta e chamou o colega. Os dois foram algemados e amarrados com fita adesiva no porão. Os ladrões ficaram 81 minutos, com duas viagens ao carro.",q:"Por que o disfarce de policiais funcionou?",o:["O segurança abriu a porta por confiar em uniformes, contra o procedimento","O alarme do museu estava desligado","Os ladrões tinham a chave da porta lateral","O segurança era cúmplice, comprovado depois","Policiais de verdade os acompanhavam"]},
+{doc:"Na cena: as fitas do circuito de vídeo foram levadas, as telas de Rembrandt foram cortadas das molduras com o vidro quebrado, e os ladrões demoraram para soltar um vaso chinês da trava. Deixaram uma moldura vazia na cadeira do diretor de segurança. Passaram ao lado de um desenho de Michelangelo e de outras obras de grande valor.",q:"O que a escolha das obras revela?",o:["Foi desconcertante: levaram obras e deixaram outras de valor maior, sem padrão claro","Levaram só as mais valiosas, por encomenda","Levaram apenas pinturas holandesas","Levaram só o que cabia numa mala","Eram especialistas em Rembrandt"]},
+{doc:"Os seguranças foram os primeiros suspeitos, mas nunca foram acusados. Segundo reportagens, o FBI havia alertado o museu, anos antes, de um plano de ladrões disfarçados de policiais. O FBI disse depois acreditar que os ladrões eram ligados a uma máfia da Nova Inglaterra e, em 2015, apontou dois criminosos da região, já mortos.",q:"Por que a investigação não terminou com prisões?",o:["Os apontados já estavam mortos e as obras nunca foram achadas","O FBI nunca suspeitou de uma quadrilha","Os seguranças confessaram e foram absolvidos","A recompensa foi paga e o caso arquivado","As obras foram devolvidas sem prisões"]},
+{doc:"Nenhuma das 13 obras foi recuperada. As molduras de obras cortadas seguem vazias nas paredes, e a recompensa chegou a US$ 10 milhões. A busca de 2012 numa propriedade de um mafioso em Connecticut, com radar de penetração no solo, não achou nada.",q:"Qual é a situação do caso hoje?",o:["Sem solução e sem as obras, com recompensa de US$ 10 milhões","As obras voltaram, mas os ladrões nunca foram achados","Os ladrões foram presos em 2012","Foi provado que foi golpe de seguro do museu","O museu repôs todas as obras com cópias"]}]);
+PX.push(
+[[["A primeira busca na casa achou algo suspeito?",0],["O médico aceitou ficar em Londres depois da visita?",0],["O corpo foi achado debaixo do piso do porão?",1],["O inspetor era Walter Dew?",1],["A casa tinha jardim?",2]],
+[["Foi achado veneno nos restos?",1],["O veneno era um sedativo?",1],["O corpo foi achado completo?",0],["O pijama ajudou a datar o enterro?",1],["O patologista usava luvas azuis?",2]],
+[["O casal viajou de trem e de navio?",1],["Eles usaram o nome verdadeiro?",0],["A secretária estava disfarçada de rapaz?",1],["O capitão avisou por telégrafo sem fio?",1],["O navio ia para a Austrália?",0]],
+[["Ethel foi condenada?",0],["O médico foi condenado à forca?",1],["O DNA de 2007 foi aceito sem contestação?",0],["Os testes usaram amostras guardadas desde 1910?",1],["O julgamento foi em Paris?",0]]],
+[[["O trem foi parado por um sinal adulterado?",1],["Os ladrões usaram armas de fogo?",0],["O maquinista ficou ferido?",1],["A tripulação foi rendida?",1],["Chovia naquela madrugada?",2]],
+[["Foram achadas digitais em objetos de uso comum?",1],["Havia um tabuleiro de Monopoly na casa?",1],["A casa foi totalmente limpa de vestígios?",0],["Foram achados veículos dos ladrões?",1],["O frasco de ketchup era de vidro?",2]],
+[["Um vizinho desconfiou das janelas escurecidas?",1],["Os ladrões planejavam queimar a casa?",1],["Eles ficaram ali o tempo que planejavam?",0],["Ouviram notícias no rádio sobre a polícia?",1],["A fazenda ficava a mais de 100 km do trem?",0]],
+[["O mentor foi preso logo?",0],["Mais de dez homens foram presos?",1],["Quase todo o dinheiro foi recuperado?",0],["O maquinista nunca superou o trauma?",1],["O trem seguia para Paris?",0]]],
+[[["Os ladrões entraram por uma janela?",0],["O segurança abriu a porta?",1],["Os seguranças foram amarrados com fita?",1],["A ação durou menos de 30 minutos?",0],["Fazia frio naquela noite?",2]],
+[["As fitas das câmeras foram levadas?",1],["Todas as obras foram cortadas das molduras?",0],["Um vaso chinês deu trabalho aos ladrões?",1],["Deixaram uma moldura na cadeira do diretor de segurança?",1],["O vaso era azul?",2]],
+[["Os seguranças foram os primeiros suspeitos?",1],["O FBI nunca soube de um plano parecido?",0],["O FBI ligou o crime a uma máfia?",1],["O FBI nomeou os ladrões como pessoas vivas?",0],["Os seguranças foram condenados?",0]],
+[["Alguma obra foi recuperada?",0],["Houve uma busca com radar em 2012?",1],["A recompensa chegou a US$ 10 milhões?",1],["Os ladrões foram presos?",0],["O museu fica em Nova York?",0]]]);
+const NQ=[
+[["O sumiço foi percebido logo pelos guardas?",0],["A obra foi destruída?",0],["O caso foi resolvido em poucas semanas?",0],["O ladrão foi achado pela impressão digital?",0],["Quem levou a obra conhecia o museu por dentro?",1],["O ladrão aproveitou um momento de menos gente no museu?",1],["A obra chegou a sair do país?",1],["Artistas famosos chegaram a ser suspeitos?",1],["O ladrão era casado?",2]],
+[["Alguém forçou as portas do banco?",0],["O caminho dos ladrões passou por baixo do prédio?",1],["O crime exigiu muito tempo de preparo?",1],["Havia um imóvel usado como base?",1],["O imóvel tinha uma fachada comercial?",1],["O crime foi descoberto na hora em que ocorreu?",0],["O dinheiro foi totalmente recuperado?",0],["Os ladrões tinham alguma informação sobre o banco?",1],["O prédio do banco tinha mais de 30 anos?",2]],
+[["Ele saiu pela porta da frente do avião?",0],["Alguém morreu no sequestro?",0],["Ele revelou o nome verdadeiro?",0],["O dinheiro foi todo encontrado?",0],["Ele deixou o avião antes do pouso final?",1],["Ele usou equipamento fornecido pelas autoridades?",1],["Ele ameaçou a tripulação com um explosivo?",1],["O FBI encerrou o caso sem identificá-lo?",1],["O voo ocorreu no feriado de Ação de Graças?",2]],
+[["O roubo foi feito de madrugada?",0],["As câmeras do museu continuaram gravando o tempo todo?",0],["Todos os quadros foram recuperados?",0],["O caso foi solucionado?",0],["Os ladrões estavam armados?",1],["Houve reféns?",1],["O Carnaval ajudou na fuga?",1],["O museu já tinha sido roubado antes?",1],["O museu ficava no alto de uma rampa?",2]],
+[["A picada foi só um acidente?",0],["O ataque foi com arma de fogo?",0],["O autor foi condenado?",0],["O homem que se afastou estava ligado ao ataque?",1],["A causa da morte foi um veneno?",1],["O veneno estava escondido num objeto comum?",1],["Houve motivação política?",1],["Houve um ataque parecido em outra cidade?",1],["O escritor tinha filhos?",2]],
+[["A causa foi uma infecção?",0],["O produto foi adulterado na fábrica?",0],["O culpado foi condenado pelas mortes?",0],["Todos os frascos eram de um só lote?",0],["O produto foi adulterado depois de sair da fábrica?",1],["Frascos de várias lojas foram envenenados?",1],["Chegou uma carta de extorsão?",1],["O caso mudou a embalagem dos remédios?",1],["O remédio era vendido só com receita?",2]]];
+const NP=[
+[[["O sumiço foi notado no mesmo dia em que ocorreu?",0],["A moldura foi levada junto com a obra?",0],["O ladrão aproveitou o dia em que o museu estava fechado?",1],["A falta da obra podia ser confundida com a rotina do museu?",1],["A moldura era do século XVI?",2]],
+[["A digital sozinha bastava para identificar o ladrão na época?",0],["O arquivo da polícia tinha digitais que não foram bem aproveitadas?",1],["O ladrão era alguém sem passado com a polícia?",0],["A digital foi achada na moldura ou no vidro?",1],["O tamanho do dedo do ladrão importava?",2]],
+[["A suspeita contra Apollinaire vinha de um furto anterior no mesmo museu?",1],["Apollinaire foi condenado?",0],["A polícia seguiu uma pista falsa?",1],["O ladrão verdadeiro era famoso na época?",0],["Picasso morava em Paris na época?",2]],
+[["O ladrão foi pego por tentar vender a obra?",1],["O possível comprador avisou as autoridades?",1],["O preço pedido foi pago?",0],["Um especialista confirmou a autenticidade antes da prisão?",1],["A obra ficou escondida por mais de um ano?",1]]],
+[[["As portas e os alarmes explicam como os ladrões entraram?",0],["A abertura na laje indica entrada pelo piso?",1],["O volume do dinheiro exigiu um transporte organizado?",1],["O cofre foi aberto sem ninguém ter percebido nada antes?",1],["O banco ficava no centro de Fortaleza?",2]],
+[["A casa e o túnel foram feitos para não chamar atenção?",1],["O túnel foi feito em poucos dias?",0],["Havia estrutura de apoio dentro do túnel?",1],["A casa tinha fachada de empresa?",1],["O túnel passava sob uma rua movimentada?",2]],
+[["A quadrilha precisava saber onde ficava a caixa-forte?",1],["Alguém ligado ao banco passou informação?",1],["Os ladrões agiram sem planejar?",0],["O dinheiro foi levado todo para um único lugar?",0],["Parte do dinheiro foi enterrada?",1]],
+[["A recuperação do dinheiro foi quase total?",0],["Houve prisões?",1],["O dinheiro foi totalmente perdido?",0],["Parte do dinheiro foi achada com suspeitos ou enterrada?",1],["Algum envolvido ficou foragido por muito tempo?",1]]],
+[[["O pedido de combustível indica que ele planejava continuar a viagem?",1],["O pedido de paraquedas indica que ele planejava deixar o avião em voo?",1],["O bilhete foi entregue a uma passageira comum?",0],["Ele pediu que o avião voasse alto?",0],["O pedido de bebida a bordo mudou o plano dele?",2]],
+[["As digitais colhidas bastaram para identificá-lo?",0],["Os objetos que ele deixou eram a principal fonte de pistas físicas?",1],["O FBI teve um suspeito pelas digitais logo após o voo?",0],["A gravata era um item sem valor para a investigação?",0],["O prendedor da gravata era de pérola?",2]],
+[["O FBI descartou McCoy por ele ter álibi?",1],["McCoy também sequestrou um avião?",1],["O FBI confirmou a identidade de Cooper algum dia?",0],["Mais de mil suspeitos foram examinados?",1],["Dan Cooper era o nome verdadeiro dele?",0]],
+[["O dinheiro achado em 1980 provou que Cooper sobreviveu?",0],["Os números de série ligaram o dinheiro ao resgate?",1],["O dinheiro achado era a maior parte do resgate?",0],["Algum corpo de Cooper foi achado?",0],["O achado foi na margem de um rio?",1]]],
+[[["O roubo aconteceu à noite?",0],["Os ladrões estavam armados?",1],["As câmeras foram desligadas a pedido dos ladrões?",1],["O museu estava vazio de visitantes?",0],["A rampa de acesso ao museu era longa?",2]],
+[["As molduras foram achadas queimadas perto do museu?",1],["A polícia achou as telas junto com as molduras?",0],["Um telefonema anônimo levou ao achado?",1],["O achado foi a mais de 10 km do museu?",0],["Havia um número de registro do museu num tecido queimado?",1]],
+[["A polícia suspeitava do dono de uma Kombi?",1],["O museu já tinha sido roubado antes?",1],["As obras de 1989 foram recuperadas?",1],["Um estrangeiro foi apontado como suspeito?",1],["Todos os ladrões de 2006 foram presos logo?",0]],
+[["Alguma das cinco obras foi recuperada?",0],["O crime prescreveu depois de 20 anos?",1],["O FBI listou o caso entre os maiores roubos de arte?",1],["O valor passava de US$ 10 milhões?",1],["Os ladrões foram identificados e condenados?",0]]],
+[[["A data do ataque tinha significado político?",1],["O ataque ocorreu em Paris?",0],["Um objeto banal serviu para disfarçar o ataque?",1],["A vítima trabalhava para uma emissora?",1],["A vítima percebeu logo que fora envenenada?",0]],
+[["A morte foi rápida?",0],["A esfera achada tinha dois furos?",1],["Havia um exame de ricina confiável na época?",0],["Os peritos reproduziram o efeito em um animal?",1],["O hospital ficava perto da ponte?",2]],
+[["Outro exilado búlgaro foi atacado de forma parecida?",1],["O ataque em Paris foi num transporte público?",1],["A esfera do outro exilado era diferente?",0],["Esse outro exilado morreu?",0],["O ataque em Paris foi depois da morte de Markov?",0]],
+[["Os arquivos búlgaros revelaram o codinome de um agente?",1],["Alguém foi condenado em Londres?",0],["O caso foi arquivado em 2013?",1],["Um suspeito foi interrogado em outro país?",1],["Os arquivos foram abertos logo após a morte?",0]]],
+[[["As vítimas moravam todas no mesmo quarteirão?",0],["As vítimas compraram o produto em lojas diferentes?",1],["A primeira vítima era uma menina?",1],["A distância entre as vítimas favorece adulteração em vários pontos de venda?",1],["Fazia frio naquele dia?",2]],
+[["Havia cianeto em algumas cápsulas?",1],["Os frascos adulterados eram de um único lote?",0],["Só as cápsulas foram adulteradas?",1],["Os testes indicaram erro de produção numa fábrica?",0],["Os peritos examinaram dezenas de milhares de cápsulas?",1]],
+[["A carta de extorsão pedia dinheiro?",1],["O autor da carta foi condenado por extorsão?",1],["O autor da carta foi condenado pelas mortes?",0],["O autor da carta admitiu ter enviado a carta?",1],["Ele provou ser inocente da extorsão?",0]],
+[["Houve recolhimento em massa dos frascos?",1],["O culpado pelos envenenamentos foi identificado?",0],["Surgiram embalagens invioláveis depois do caso?",1],["Uma lei federal contra adulteração foi aprovada?",1],["O produto sumiu do mercado para sempre?",0]]]];
+NQ.forEach((q,c)=>ST[c].q=q);NP.forEach((p,c)=>PX[c]=p);
+const XX=[
+[[["O ladrão deixou a moldura dentro do museu?",1],["A obra foi retirada da parede durante a visitação?",0],["Os quatro pregos na parede indicam que a obra foi tirada do suporte por alguém?",1],["O guarda tinha motivo para supor um sumiço de rotina?",1],["A obra era a única pintura da galeria?",2]],
+[["A digital foi achada num objeto que o ladrão deixou no museu?",1],["Foi preciso DNA para ligar a digital a alguém?",0],["A polícia da época usava medidas do corpo como parte do arquivo?",1],["A digital foi usada para prender o ladrão em 1911?",0],["O vidro da moldura estava intacto?",2]]],
+[[["Os ladrões levaram notas de baixo valor e grande volume?",1],["O cofre foi aberto com explosivo?",0],["A laje de concreto foi perfurada?",1],["Os funcionários descobriram o crime na segunda-feira?",1],["O prédio do banco ficava ao lado de um rio?",2]],
+[["O túnel tinha ventilação?",1],["O túnel tinha cerca de 80 metros?",1],["O túnel foi cavado sem nenhuma estrutura de apoio?",0],["A casa ficava a mais de 5 km do banco?",0],["As paredes do túnel eram pintadas?",2]]],
+[[["O sequestrador pediu notas de US$ 100?",0],["Ele ofereceu soltar os passageiros em troca do resgate?",1],["O avião pousou em Seattle antes de ele saltar?",1],["Ele pediu que o avião decolasse de novo depois de Seattle?",1],["Ele usava óculos escuros?",2]],
+[["O FBI tratou o avião como cena de crime?",1],["O FBI achou dezenas de digitais latentes?",1],["A gravata deixada era de pressão?",1],["O FBI teve DNA conclusivo do sequestrador?",0],["O FBI considerou o avião inútil para a investigação?",0]]],
+[[["Os ladrões usaram uma granada para intimidar?",1],["A ação durou várias horas?",0],["Os seguranças reagiram e impediram o roubo?",0],["Um ladrão usou uma faca para soltar um quadro?",1],["Os reféns eram funcionários do museu?",0]],
+[["O telefonema anônimo foi decisivo para achar as molduras?",1],["As molduras foram achadas dentro do museu?",0],["Os restos das molduras eram de metal?",0],["O achado confirmou onde estavam as telas?",0],["O achado foi num morro próximo ao museu?",1]]],
+[[["O local do ataque era um ponto de ônibus?",1],["A vítima foi atingida na coxa?",1],["O agressor esfaqueou a vítima?",0],["O ataque teve muitas testemunhas?",2],["A vítima percebeu logo que corria risco de morte?",0]],
+[["A esfera era menor que um grão de arroz?",1],["Um exame de sangue simples achava ricina na época?",0],["O corpo teve febre alta antes da morte?",1],["A esfera era de metal nobre?",1],["O perito que achou a esfera era de Porton Down?",1]]],
+[[["As duas primeiras mortes eram da mesma família?",0],["Uma família perdeu vários membros depois do funeral de um parente?",1],["Todas as vítimas eram idosas?",0],["Paramédicos ligaram os casos ao remédio comum?",1],["Os envenenamentos começaram num dia de semana?",2]],
+[["O veneno estava nas cápsulas e não nos comprimidos?",1],["A dose de cianeto por cápsula superava muito a dose letal?",1],["O veneno foi achado em todos os frascos examinados?",0],["Os frascos com veneno vinham de uma só fábrica?",0],["Os frascos tinham sinais visíveis de arrombamento?",0]]],
+[[["A casa tinha porão?",1],["O corpo foi achado enterrado no jardim?",0],["Os restos estavam completos?",0],["A polícia voltou à casa depois do sumiço do médico?",1],["O médico estava em casa quando o corpo foi achado?",0]],
+[["Spilsbury foi o patologista do caso?",1],["O veneno achado era um sedativo?",1],["A pele com cicatriz foi usada na identificação?",1],["Foi achado cianeto nos restos?",0],["O pijama era de antes de 1900?",0]]],
+[[["O sinal vermelho falso foi ligado a uma bateria?",1],["Os ladrões cortaram o telefone da linha?",1],["O maquinista foi golpeado?",1],["Os ladrões levaram mais de uma hora para passar os sacos?",0],["Os ladrões levaram o trem inteiro?",0]],
+[["Havia digitais num tabuleiro de Monopoly?",1],["As digitais estavam só em objetos óbvios, como maçanetas?",0],["A polícia achou veículos na fazenda?",1],["Os ladrões limparam tudo antes de fugir?",0],["A fazenda ficava em Buckinghamshire?",2]]],
+[[["Os ladrões se identificaram como policiais?",1],["Os seguranças foram amarrados com fita adesiva?",1],["Os ladrões saíram em menos de uma hora?",0],["Os seguranças estavam no porão quando foram amarrados?",1],["O museu estava aberto ao público durante o roubo?",0]],
+[["Os ladrões levaram as fitas do circuito de vídeo?",1],["Uma moldura vazia ficou na cadeira do diretor de segurança?",1],["Foi achado algum carro dos ladrões?",0],["As obras de maior valor do museu foram todas levadas?",0],["Os ladrões cortaram telas das molduras?",1]]]];
+XX.forEach((e,c)=>{PX[c][0]=PX[c][0].concat(e[0]);PX[c][1]=PX[c][1].concat(e[1])});
+const EX=[["O ladrão foi interrompido por um guarda e largou a moldura na fuga","A impressão estava borrada e não serviu para comparação","Era amigo de um diretor do Louvre sob suspeita","Um perito identificou as camadas de tinta no microscópio, no hotel"],
+["Os ladrões entraram pelo telhado numa madrugada de sexta","Esconder a identidade do dono do imóvel","Convencer o vigia a abrir o portão","O banco recuperou tudo pelo rastreio das notas, mas ocultou o valor"],
+["Permitir que caças o acompanhassem sem ultrapassar o avião","Tinha o número de série do avião","A polícia nunca o procurou","Que o dinheiro foi gasto em Seattle"],
+[],
+["Era o dia em que o regime búlgaro baniu seus livros","Detectaram ricina na esfera por cromatografia moderna","Mostrou que o veneno era diferente em cada vítima","Arquivado em 1995 por ordem do Reino Unido"],
+["Num caminhão de distribuição de uma só rede","A contaminação do cianeto ocorreu na mistura da fábrica","Ele já estava preso durante os envenenamentos","Leis proibindo cápsulas e obrigando comprimidos"]];
+const EW=["Um guarda do Louvre vendeu a obra a um colecionador e foi demitido.","Os ladrões escavaram por um ano a partir de um esgoto, sem imóvel alugado.","Foi identificado como ex-militar, mas morreu antes de ser preso.","Os ladrões invadiram à noite, pelo telhado, e desligaram o alarme à distância.","Foi envenenado com polônio num almoço com colegas da BBC.","Um lote de cápsulas contaminado foi vendido só numa rede de farmácias, por erro do distribuidor."];
+EX.forEach((a,c)=>a.forEach((x,p)=>PH[c][p].o.push(x)));EW.forEach((x,c)=>ST[c].w.push(x));
+let solved=[];
+try{solved=JSON.parse(localStorage.getItem("an7_solved"))||[]}catch(e){}
+try{if(!localStorage.getItem("an8_fix3")){solved=solved.filter(k=>k!=3);localStorage.setItem("an8_fix3","1");localStorage.setItem("an7_solved",JSON.stringify(solved))}}catch(e){}
+const save=()=>{try{localStorage.setItem("an7_solved",JSON.stringify(solved))}catch(e){}};
+const star=k=>"★".repeat(ST[k].d)+"☆".repeat(Math.max(0,6-ST[k].d));
+function map(){
+ window.scrollTo(0,0);
+ let s=`<div class="hero">${dos("Pasta de evidências","","?","EVIDÊNCIAS","")}
+ <h1>Crimes que realmente aconteceram. Faça as perguntas certas e descubra como.</h1>
+ <p>Cada carta é um caso real, com 9 casos e dificuldade crescente, e 6 fases: o caso, a cena do crime, a perícia, a investigação, as evidências e a solução. Em cada fase você só pode fazer 3 perguntas. Você tem 3 vidas, e cada erro custa uma.</p>
+ <a class="cta" href="#deck" id="go">Ver casos</a></div>
+ <div class="deck" id="deck">`;
+ ST.forEach((c,k)=>{
+  const st=solved.includes(k)?"done":"cur";
+  s+=st=="lock"?`<div class="card lock" role="img" aria-label="Carta ${k+1} bloqueada"><span class="big">?</span><span>Carta ${k+1}</span></div>`
+  :`<button class="card ${st}" data-i="${k}"><span class="img">${IMG[k]}</span><span class="meta"><span class="gold">${star(k)}</span> ${c.y}</span><strong>${c.t}</strong><span class="tz">${c.s.split(". ")[0].replace(/\.$/,"")}.</span><span class="st">${st=="done"?"Resolvido":"Investigar"}</span></button>`;
+ });
+ s+=`</div><p class="meta">Resolvidos: ${solved.length} de ${ST.length}. Baseado em relatos públicos. As imagens são ilustrações, não fotos dos casos.</p>`+(solved.length>=ST.length?`<p class="stamp">TODOS RESOLVIDOS</p><br>`:"")+`<button class="btn ghost" id="rs">Zerar progresso</button>`;
+ app.innerHTML=s;
+ $("#go").onclick=e=>{e.preventDefault();$("#deck").scrollIntoView({behavior:"smooth"})};
+ app.querySelectorAll("button.card").forEach(n=>n.onclick=()=>play(+n.dataset.i));
+ $("#rs").onclick=()=>{if(confirm("Apagar todo o progresso?")){solved=[];save();map()}};
+}
+function play(i){
+ window.scrollTo(0,0);
+ const S=ST[i],P=PH[i],N=["Não","Sim","Irrelevante"];
+ let ph=0,lives=3,busy=false;const taken=new Set();
+ const order=sh(S.q);
+ app.innerHTML=`<div class="top"><button class="btn ghost" id="bk">Voltar</button><span class="meta" id="lv"></span></div>
+ <div class="himg">${IMG[i]}</div><h2>${S.t}</h2><p class="meta"><span class="gold">${star(i)}</span> Fato real: ${S.l}, ${S.y}</p>
+ <div class="steps" id="st"></div><h3 id="pn"></h3><div id="cl"></div><div id="pk"></div><div id="log" aria-live="polite"></div><div id="qa"></div><p class="hint" id="ht" role="status"></p>`;
+ $("#bk").onclick=map;
+ const hearts=()=>$("#lv").textContent="Vidas: "+"♥".repeat(lives)+"♡".repeat(3-lives);
+ const head=()=>{hearts();$("#st").innerHTML=PN.map((n,k)=>`<i class="${k<ph?"d":k==ph?"c":""}" title="${n}"></i>`).join("");$("#pn").textContent=`Fase ${ph+1} de 6: ${PN[ph]}`;if(ph>0)setTimeout(()=>$("#pn").scrollIntoView({behavior:"smooth",block:"start"}),60)};
+ function go(){
+  busy=false;head();$("#ht").textContent="";
+  if(ph==0){
+   $("#cl").innerHTML=`<p class="clue"><b>Relato inicial</b>${S.s}</p>`;
+   picker(order);$("#qa").innerHTML=`<button class="btn" id="nx">Ir para a cena do crime</button>`;$("#nx").onclick=()=>{ph=1;go()};return;
+  }
+  if(ph<5){
+   $("#cl").insertAdjacentHTML("beforeend",`<p class="clue"><b>${PN[ph]}</b>${P[ph-1].doc}</p>`);
+   {const pl=PX[i][ph-1];picker(pl.length>6?sh(pl).slice(0,6):pl)}quiz(P[ph-1].q,P[ph-1].o[0],P[ph-1].o);return;
+  }
+  picker(order.filter(q=>!taken.has(q)));
+  quiz("O que realmente aconteceu?",S.r,[S.r,...S.w]);
+ }
+ function picker(pool){
+  let used=0;const box=$("#pk");
+  const draw=()=>{
+   box.innerHTML=`<p class="q">Escolha até 3 perguntas (restam ${3-used}). A resposta é só Sim, Não ou Irrelevante.</p><div class="qs">${pool.map((q,k)=>`<button class="q" data-k="${k}"${used>=3||taken.has(q)?" disabled":""}>${q[0]}</button>`).join("")}</div>`;
+   box.querySelectorAll(".q").forEach(b=>b.onclick=()=>{const q=pool[+b.dataset.k];taken.add(q);used++;
+    $("#log").insertAdjacentHTML("beforeend",`<p class="ans a${q[1]}"><b>${N[q[1]]}</b><span>${q[0]}</span></p>`);draw()});
+  };
+  draw();
+ }
+ function quiz(q,ok,opts){
+  const o=sh(opts);
+  $("#qa").innerHTML=`<p class="q">${q}</p>`+o.map((t,k)=>`<button class="opt" data-k="${k}">${t}</button>`).join("");
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+   if(busy)return;const t=o[+b.dataset.k];
+   if(t==ok){busy=true;b.classList.add("ok");
+    if(ph==5){win();return}
+    ph++;$("#qa").insertAdjacentHTML("beforeend",`<button class="btn" id="nx">Próxima fase</button>`);$("#nx").onclick=go;$("#nx").focus();return}
+   b.classList.add("bad");b.disabled=true;lives--;hearts();
+   if(lives<=0){busy=true;lose();return}
+   $("#ht").textContent="Errado: você perdeu uma vida. Releia o caderno de pistas.";
+  });
+ }
+ function win(){
+  if(!solved.includes(i)){solved.push(i);save()}
+  $("#st").innerHTML=PN.map(()=>`<i class="d"></i>`).join("");$("#lv").textContent="";
+  $("#qa").insertAdjacentHTML("beforeend",`<p class="stamp">CASO RESOLVIDO</p><p>${S.r}</p>${i<ST.length-1?`<button class="btn" id="nc">Próxima carta</button>`:""}<button class="btn ghost" id="mp">Voltar às cartas</button>`);
+  const n=$("#nc");if(n){n.onclick=()=>play(i+1);n.focus({preventScroll:true})}$("#mp").onclick=map;$(".stamp").scrollIntoView({behavior:"smooth",block:"center"});
+ }
+ function lose(){
+  $("#qa").insertAdjacentHTML("beforeend",`<p class="stamp l">CASO PERDIDO</p><p>As vidas acabaram e o caso foi arquivado. Recomece da primeira fase.</p><button class="btn" id="rt">Recomeçar o caso</button><button class="btn ghost" id="mp">Voltar às cartas</button>`);
+  $("#rt").onclick=()=>play(i);$("#mp").onclick=map;$("#rt").focus();
+ }
+ go();
+}
+map();
+</script>
+</body>
+</html>
